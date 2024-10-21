@@ -5,7 +5,6 @@ import com.learn.springboottutorial.model.User;
 import com.learn.springboottutorial.repository.UserRepository;
 import com.learn.springboottutorial.request.RegistrationRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 /**
