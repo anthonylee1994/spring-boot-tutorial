@@ -3,11 +3,15 @@ package com.learn.springboottutorial.service.appointment;
 import com.learn.springboottutorial.enums.AppointmentStatus;
 import com.learn.springboottutorial.exception.ResourceNotFoundException;
 import com.learn.springboottutorial.model.Appointment;
+import com.learn.springboottutorial.model.Pet;
 import com.learn.springboottutorial.model.User;
 import com.learn.springboottutorial.repository.AppointmentRepository;
 import com.learn.springboottutorial.repository.UserRepository;
 import com.learn.springboottutorial.request.AppointmentUpdateRequest;
+import com.learn.springboottutorial.request.BookAppointmentRequest;
+import com.learn.springboottutorial.service.pet.IPetService;
 import com.learn.springboottutorial.utils.FeedBackMessage;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,13 +29,22 @@ import java.util.Optional;
 public class AppointmentService implements IAppointmentService {
     private final AppointmentRepository appointmentRepository;
     private final UserRepository userRepository;
+    private final IPetService petService;
 
+    @Transactional
     @Override
-    public Appointment createAppointment(Appointment appointment, Long senderId, Long recipientId) {
+    public Appointment createAppointment(BookAppointmentRequest request, Long senderId, Long recipientId) {
         Optional<User> sender = userRepository.findById(senderId);
         Optional<User> recipient = userRepository.findById(recipientId);
 
         if (sender.isPresent() && recipient.isPresent()) {
+            Appointment appointment = request.getAppointment();
+
+            List<Pet> pets = request.getPets();
+            pets.forEach(pet -> pet.setAppointment(appointment));
+            List<Pet> savedPets = petService.savePetsForAppointment(pets);
+            appointment.setPets(savedPets);
+
             appointment.addPatient(sender.get());
             appointment.addVeterinarian(recipient.get());
             appointment.setAppointmentNo();
