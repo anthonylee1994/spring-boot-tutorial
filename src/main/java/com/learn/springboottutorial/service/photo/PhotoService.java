@@ -59,7 +59,7 @@ public class PhotoService implements IPhotoService {
             user.removeUserPhoto();
             userRepository.save(user);
         }, () -> {
-            throw new ResourceNotFoundException(FeedBackMessage.NOT_FOUND);
+            throw new ResourceNotFoundException(FeedBackMessage.RESOURCE_NOT_FOUND);
         });
 
     }
@@ -75,7 +75,7 @@ public class PhotoService implements IPhotoService {
             photo.setFileName(file.getOriginalFilename());
             return photoRepository.save(photo);
         }
-        throw new ResourceNotFoundException(FeedBackMessage.NOT_FOUND);
+        throw new ResourceNotFoundException(FeedBackMessage.RESOURCE_NOT_FOUND);
     }
 
     @Override

@@ -1,6 +1,6 @@
 package com.learn.springboottutorial.factory;
 
-import com.learn.springboottutorial.exception.UserAlreadyExistsException;
+import com.learn.springboottutorial.exception.AlreadyExistsException;
 import com.learn.springboottutorial.model.User;
 import com.learn.springboottutorial.repository.UserRepository;
 import com.learn.springboottutorial.request.RegistrationRequest;
@@ -21,7 +21,7 @@ public class SimpleUserFactory implements UserFactory {
     @Override
     public User createUser(RegistrationRequest registrationRequest) {
         if (userRepository.existsByEmail(registrationRequest.getEmail())) {
-            throw new UserAlreadyExistsException("Oops! " + registrationRequest.getEmail() + "already exists.");
+            throw new AlreadyExistsException("Oops! " + registrationRequest.getEmail() + "already exists.");
         }
 
         return switch (registrationRequest.getUserType()) {

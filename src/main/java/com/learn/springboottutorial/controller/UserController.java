@@ -3,7 +3,7 @@ package com.learn.springboottutorial.controller;
 import com.learn.springboottutorial.dto.EntityConverter;
 import com.learn.springboottutorial.dto.UserDto;
 import com.learn.springboottutorial.exception.ResourceNotFoundException;
-import com.learn.springboottutorial.exception.UserAlreadyExistsException;
+import com.learn.springboottutorial.exception.AlreadyExistsException;
 import com.learn.springboottutorial.model.User;
 import com.learn.springboottutorial.request.RegistrationRequest;
 import com.learn.springboottutorial.request.UserUpdateRequest;
@@ -42,7 +42,7 @@ public class UserController {
             User theUser = userService.register(request);
             UserDto registeredUser = entityConverter.mapEntityToDto(theUser, UserDto.class);
             return ResponseEntity.ok(new ApiResponse(FeedBackMessage.CREATE_SUCCESS, registeredUser));
-        } catch (UserAlreadyExistsException e) {
+        } catch (AlreadyExistsException e) {
             return ResponseEntity.status(CONFLICT).body(new ApiResponse(e.getMessage(), null));
         } catch (Exception e) {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
